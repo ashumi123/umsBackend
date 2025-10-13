@@ -90,6 +90,7 @@ app.post('/api/v1/register', async (req, res) => {
 // }));
 const allowedOrigins = [
   'https://umsfrontuniversit.netlify.app',
+  'https://umsfrontuniversit.netlify.app/dashboard',
   'http://localhost:5000' // Add any development domains here
 ];
 
