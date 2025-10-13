@@ -1,5 +1,11 @@
-# Example Redirect for Serverless Functions
+[build]
+  # Assuming your build command is empty or not needed for a pure API
+  # The directory containing your serverless function source code.
+  functions = "netlify/functions" 
+
+# --- Essential Redirect for the Serverless Function ---
+# This rule proxies all requests starting with /api/v1/ to the 'api' function.
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/server/:splat"  # Assuming your function is named 'server'
-  status = 200
+  from = "/api/v1/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200 # Use 200 to proxy the request without changing the URL
