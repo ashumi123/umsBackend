@@ -17,7 +17,7 @@ import User from './models/Users.js'; // Import the User model
 dotenv.config();
 const JWT_SECRET="y7v8212EDEGS"
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
