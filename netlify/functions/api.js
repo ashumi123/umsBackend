@@ -10,23 +10,13 @@ import {app} from '../../server.js'
 const handler = serverless(app);
 
 // Export the handler
-// module.exports.handler = async (event, context) => {
-//     // Optionally: Log the event details for debugging
-//     // console.log("EVENT:", JSON.stringify(event, null, 2)); 
+export default async (event, context) => {
+    // Optionally: Log the event details for debugging
+    // console.log("EVENT:", JSON.stringify(event, null, 2)); 
 
-//     // Set context.callbackWaitsForEmptyEventLoop = false 
-//     // to allow Lambda to send a response before the database connection closes.
-//     context.callbackWaitsForEmptyEventLoop = false; 
-
-//     return handler(event, context);
-// };
-
-export async function handler(event, context) {
-    
     // Set context.callbackWaitsForEmptyEventLoop = false 
     // to allow Lambda to send a response before the database connection closes.
     context.callbackWaitsForEmptyEventLoop = false; 
 
-    // The handler function is the one provided by serverless-http
     return handler(event, context);
 };
