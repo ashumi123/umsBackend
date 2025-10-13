@@ -88,22 +88,43 @@ app.post('/api/v1/register', async (req, res) => {
 //   optionsSuccessStatus: 200 // For legacy browser support
 
 // }));
+const allowedOrigins = [
+  'https://umsfrontuniversit.netlify.app',
+  'http://localhost:5000' // Add any development domains here
+];
 
-app.use(cors({
-  // **CRITICAL FIX: Removed the trailing slash**
-  origin: 'https://umsfrontuniversit.netlify.app', 
+const corsOptions = {
+  // Check if the request origin is in the allowed list
+  origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+          const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+          return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+  },
+  // If your front-end sends cookies or authentication headers
+  credentials: true
+};
+app.use(cors(corsOptions));
+
+// app.use(cors({
+//   // **CRITICAL FIX: Removed the trailing slash**
+//   origin: 'https://umsfrontuniversit.netlify.app', 
   
-  // These are good to keep for handling preflight requests (OPTIONS)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   // These are good to keep for handling preflight requests (OPTIONS)
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   
-  // Include if your frontend is sending headers like Authorization (for JWTs) or custom headers
-  allowedHeaders: ['Content-Type', 'Authorization'],
+//   // Include if your frontend is sending headers like Authorization (for JWTs) or custom headers
+//   allowedHeaders: ['Content-Type', 'Authorization'],
   
-  // Include this if you need to pass cookies or session information
-  credentials: true, 
+//   // Include this if you need to pass cookies or session information
+//   credentials: true, 
   
-  optionsSuccessStatus: 200 
-}));
+//   optionsSuccessStatus: 200 
+// }));
 
 // 2. Login Route (Validates dynamic data against MongoDB)
 app.post('/api/v1/login', async (req, res) => {
