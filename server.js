@@ -82,9 +82,11 @@ app.post('/api/v1/register', async (req, res) => {
 });
 
 app.use(cors({
-  origin: '*', // or specify your frontend origin for better security
+  origin: 'https://umsfrontuniversit.netlify.app/', // or specify your frontend origin for better security
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  // allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // For legacy browser support
+
 }));
 
 // 2. Login Route (Validates dynamic data against MongoDB)
@@ -92,7 +94,6 @@ app.post('/api/v1/login', async (req, res) => {
   try {
       const { username, password } = req.body;
 
-      
       // Find the user by username
       const user = await User.findOne({ username });
       if (!user) {
