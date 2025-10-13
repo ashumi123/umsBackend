@@ -81,12 +81,28 @@ app.post('/api/v1/register', async (req, res) => {
   }
 });
 
-app.use(cors({
-  origin: 'https://umsfrontuniversit.netlify.app/', // or specify your frontend origin for better security
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  // allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200 // For legacy browser support
+// app.use(cors({
+//   origin: 'https://umsfrontuniversit.netlify.app/', // or specify your frontend origin for better security
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   // allowedHeaders: ['Content-Type', 'Authorization'],
+//   optionsSuccessStatus: 200 // For legacy browser support
 
+// }));
+
+app.use(cors({
+  // **CRITICAL FIX: Removed the trailing slash**
+  origin: 'https://umsfrontuniversit.netlify.app', 
+  
+  // These are good to keep for handling preflight requests (OPTIONS)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  
+  // Include if your frontend is sending headers like Authorization (for JWTs) or custom headers
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  
+  // Include this if you need to pass cookies or session information
+  credentials: true, 
+  
+  optionsSuccessStatus: 200 
 }));
 
 // 2. Login Route (Validates dynamic data against MongoDB)
