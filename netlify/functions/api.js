@@ -1,7 +1,7 @@
 // netlify/functions/api.js - The Lambda Handler
 // const serverless = require('serverless-http');
 import serverless from 'serverless-http'
-import app from '../../server'
+import app from '../../server.js'
 
 // Note: Mongoose connection should persist across function invocations in Netlify, 
 // but if you experience issues, you might need a simple connection check here.
