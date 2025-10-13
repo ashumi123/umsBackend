@@ -17,7 +17,7 @@ import User from './models/Users.js'; // Import the User model
 dotenv.config();
 const JWT_SECRET="y7v8212EDEGS"
 
-export const app = express();
+const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -129,6 +129,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: 'Something broke!', error: err.message });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+export default app;
