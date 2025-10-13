@@ -107,7 +107,7 @@ const corsOptions = {
       return callback(null, true);
   },
   // If your front-end sends cookies or authentication headers
-  credentials: true
+  // credentials: true
 };
 app.use(cors(corsOptions));
 
