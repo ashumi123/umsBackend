@@ -18,6 +18,28 @@ dotenv.config();
 const JWT_SECRET="y7v8212EDEGS"
 
 const app = express();
+const allowedOrigins = [
+  'https://umsfrontuniversit.netlify.app',
+  'https://umsfrontuniversit.netlify.app/dashboard',
+  'http://localhost:5000' // Add any development domains here
+];
+
+const corsOptions = {
+  // Check if the request origin is in the allowed list
+  origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+          const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+          return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+  },
+  // If your front-end sends cookies or authentication headers
+  // credentials: true
+};
+app.use(cors(corsOptions));
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -88,28 +110,7 @@ app.post('/api/v1/register', async (req, res) => {
 //   optionsSuccessStatus: 200 // For legacy browser support
 
 // }));
-const allowedOrigins = [
-  'https://umsfrontuniversit.netlify.app',
-  'https://umsfrontuniversit.netlify.app/dashboard',
-  'http://localhost:5000' // Add any development domains here
-];
 
-const corsOptions = {
-  // Check if the request origin is in the allowed list
-  origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) === -1) {
-          const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-          return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-  },
-  // If your front-end sends cookies or authentication headers
-  // credentials: true
-};
-app.use(cors(corsOptions));
 
 // app.use(cors({
 //   // **CRITICAL FIX: Removed the trailing slash**
