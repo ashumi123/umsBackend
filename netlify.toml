@@ -1,0 +1,5 @@
+# Example Redirect for Serverless Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"  # Assuming your function is named 'server'
+  status = 200
