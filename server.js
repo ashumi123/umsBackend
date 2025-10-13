@@ -164,6 +164,9 @@ app.post('/api/v1/login', async (req, res) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://umsfrontuniversit.netlify.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   console.error(err.stack);
   res.status(500).send({ message: 'Something broke!', error: err.message });
 });
