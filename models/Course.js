@@ -99,6 +99,14 @@ const CourseSchema = new mongoose.Schema({
     subjects: {
         type: [SubjectSchema],
         default: [],
+    },
+    school:{
+        type: String, 
+        required: [true, 'School is required.'], 
+    },
+    department:{
+        type: String, 
+        required: [true, 'School is required.'], 
     }
 }, { 
     timestamps: true 
