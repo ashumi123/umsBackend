@@ -419,7 +419,7 @@ export const getStudentsWithMarksPreview = async (req, res) => {
         let performance = { finalCGPA: 0.00, overallPercentage: 0.00, result: 'Data Missing', detailedSubjects: [] };
 
         if (courseSubjects && studentObject.marks) {
-            performance = mergeAndCalculatePerformance(studentObject.marks, studentObject.);
+            performance = mergeAndCalculatePerformance(studentObject.marks, studentObject.programSubjects);
         }
 
         const studentsWithPerformance = [{
