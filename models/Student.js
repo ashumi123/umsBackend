@@ -32,6 +32,35 @@ const SemesterMarksSchema = new mongoose.Schema({
 }, { _id: false });
 
 
+const SubjectSchema = new mongoose.Schema({
+    subjectName: { 
+        type: String, 
+        
+    },
+    subjectCode: { 
+        type: String, 
+       
+    },
+    credit: { // Credit points for the subject
+        type: Number,
+    },
+    internalMax: { // Max marks for internal assessment (e.g., 40)
+        type: Number,
+       
+    },
+    externalMax: { // Max marks for external assessment (e.g., 60)
+        type: Number,
+    },
+    internalObtain:{
+        type:Number,
+        default:0
+    },
+    externalObtain:{
+        type:Number,
+        default:0
+    }
+    // The total max marks is derived from internalMax + externalMax
+}, { _id: false }); 
 const previousQualificationSchema = new mongoose.Schema({
     examination: { type: String },
     totalMarks: { type: String },
@@ -69,6 +98,7 @@ const studentSchema = new mongoose.Schema({
 
     // 3. Previous Qualifications
     previousQualifications: [previousQualificationSchema],
+    programSubjects: [SubjectSchema],
 
     // 4. Programme Details
     course: { type: String, required: true },
