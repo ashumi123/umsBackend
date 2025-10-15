@@ -253,6 +253,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
                 // Determine maxTotalMarks from the internal and external max marks
                 // This accounts for subjectDef being a Mongoose subdocument or a plain object.
                 const maxTotalMarks = subjectDef._doc.internalMax + subjectDef._doc.externalMax;
+                const obtTotalMarks = subjectDef._doc.subjectDef?.internalObtain + subjectDef._doc.externalObtain;
             
                 console.log('subjectDef.subjectName', subjectDef?._doc?.subjectName);
             
@@ -267,7 +268,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
                 totalEarnedCredit += result.earnedCredit;
             
                 // 3. Accumulate Marks Obtained and Total Max Marks
-                totalMarksObtained += result.totalMarks;
+                totalMarksObtained += obtTotalMarks;
                 totalMaxMarks += maxTotalMarks; // Use the explicitly calculated value
             
                 // Build a detailed subject record for the client
@@ -279,8 +280,8 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
                     maxMarks: maxTotalMarks, // Use the explicitly calculated value
                     internalMax: subjectDef?._doc.internalMax,
                     externalMax: subjectDef?._doc.externalMax,
-                    internalMarks: result.internalObtain?result.internalObtain:50, // New field for clarity
-                    externalMarks: result.externalObtain?result.externalObtain:50, // New field for clarity
+                    internalMarks: subjectDef?._doc?.internalObtain?subjectDef?._doc?.internalObtain:50, // New field for clarity
+                    externalMarks: subjectDef?._doc?.externalObtain?subjectDef?._doc?.externalObtain:50, // New field for clarity
                     totalMarksObtained: result.totalMarks,
                     gp: result?.gp,
                     earnedCredit: result.earnedCredit,
