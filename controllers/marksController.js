@@ -361,7 +361,7 @@ export const getStudentsWithMarks = async (req, res) => {
                 overallPercentage: performance.overallPercentage,
                 result: performance.result,
                 // Include detailed subjects if the client needs them for drill-down
-                subjects: performance.detailedSubjects, 
+                subjects: student.programSubjects, 
             };
         });
 
