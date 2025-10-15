@@ -200,7 +200,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
     
     // Create a quick lookup map for subject definitions (Code -> Def)
     const subjectDefMap = new Map();
-    courseSubjects.subjects.forEach(def => {
+    courseSubjects.forEach(def => {
         // Ensure both max marks fields exist for a valid definition
         if (def.internalMax !== undefined && def.externalMax !== undefined) {
             subjectDefMap.set(def.subjectCode, {
@@ -249,7 +249,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
             //         earnedCredit: result.earnedCredit,
             //     });
             // } 
-            if (subjectDef && result.credit !== undefined) {
+            if (subjectDef ) {
                 // Determine maxTotalMarks from the internal and external max marks
                 // This accounts for subjectDef being a Mongoose subdocument or a plain object.
                 const maxTotalMarks = subjectDef._doc.internalMax + subjectDef._doc.externalMax;
@@ -261,7 +261,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
                 // Assuming GP is 1 for totalCreditPoint calculation (as in original code), 
                 // but this is often Credit * GradePoint, so check your original GP calculation logic.
                 // Sticking to original: totalCreditPoint += subjectDef.credit * 1;
-                totalCreditPoint += subjectDef?._doc.credit * (result.gp !== undefined ? result.gp : 1); // Use GP if available, otherwise 1 (as per original logic's intent, but safer to use GP)
+                totalCreditPoint += [subjectDef?._doc?.credit?subjectDef?._doc?.credit:1] * (result.gp !== undefined ? result.gp : 1); // Use GP if available, otherwise 1 (as per original logic's intent, but safer to use GP)
             
                 // 2. Accumulate Earned Credit (The credit the student actually earned, typically equals subjectDef.credit on pass)
                 totalEarnedCredit += result.earnedCredit;
@@ -275,12 +275,12 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
                     semester: semesterName,
                     subjectName: subjectDef?._doc?.subjectName,
                     subjectCode: subjectDef?._doc.subjectCode,
-                    credit: subjectDef?._doc.credit, // Max Credit
+                    credit: subjectDef?._doc.credit?subjectDef?._doc.credit:1, // Max Credit
                     maxMarks: maxTotalMarks, // Use the explicitly calculated value
                     internalMax: subjectDef?._doc.internalMax,
                     externalMax: subjectDef?._doc.externalMax,
-                    internalMarks: result.internalMarks?result.internalMarks:50, // New field for clarity
-                    externalMarks: result.externalMarks?result.externalMarks:50, // New field for clarity
+                    internalMarks: result.internalObtain?result.internalObtain:50, // New field for clarity
+                    externalMarks: result.externalObtain?result.externalObtain:50, // New field for clarity
                     totalMarksObtained: result.totalMarks,
                     gp: result?.gp,
                     earnedCredit: result.earnedCredit,
@@ -343,7 +343,7 @@ export const getStudentsWithMarks = async (req, res) => {
 
             if (courseSubjects && studentObject.marks) {
                 // Calculate performance using student's marks and course definitions
-                performance = mergeAndCalculatePerformance(studentObject.marks, courseSubjects);
+                performance = mergeAndCalculatePerformance(studentObject.marks, student.programSubjects);
             } else {
                 // Handle missing data scenario
                 performance = { 
