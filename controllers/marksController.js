@@ -382,6 +382,7 @@ export const getStudentsWithMarksPreview = async (req, res) => {
         const mockStudent = {
             id: students._id,
             nameCandidate: students.nameCandidate,
+            programSubjects:students.programSubjects,
             enrollmentNo: students.enrollmentNo,
             programCode: students.program, // Assuming the program field is now programCode
             // Student's marks: Key is Semester Name, Value is SemesterMarksSchema object
@@ -418,7 +419,7 @@ export const getStudentsWithMarksPreview = async (req, res) => {
         let performance = { finalCGPA: 0.00, overallPercentage: 0.00, result: 'Data Missing', detailedSubjects: [] };
 
         if (courseSubjects && studentObject.marks) {
-            performance = mergeAndCalculatePerformance(studentObject.marks, courseSubjects);
+            performance = mergeAndCalculatePerformance(studentObject.marks, studentObject.);
         }
 
         const studentsWithPerformance = [{
