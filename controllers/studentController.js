@@ -234,6 +234,7 @@ export const registerNewStudent = async (req, res) => {
         });
 
     } catch (error) {
+        console.log('error',error);
         if (error.code === 11000) {
             const field = Object.keys(error.keyValue)[0];
             return res.status(400).json({ success: false, message: `Duplicate entry for ${field}: ${error.keyValue[field]} already exists.` });
