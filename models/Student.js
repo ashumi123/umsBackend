@@ -82,12 +82,12 @@ const studentSchema = new mongoose.Schema({
     dob: { type: Date },
     gender: { type: String, enum: ['Male', 'Female', 'Other'] },
     category: { type: String },
-    aadharNumber: { type: String, default:'' },
+    aadharNumber: { type: String, unique: false, default:'' },
     designation: { type: String },
     photoPath: { type: String },
 
     // 2. Communication Details
-    contactNumber: { type: String, required: true },
+    contactNumber: { type: String },
     emailAddress: { type: String, required: true, unique: true },
     fatherContact: { type: String },
     motherContact: { type: String },
