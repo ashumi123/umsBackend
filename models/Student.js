@@ -82,7 +82,7 @@ const studentSchema = new mongoose.Schema({
     dob: { type: Date },
     gender: { type: String, enum: ['Male', 'Female', 'Other'] },
     category: { type: String },
-    aadharNumber: { type: String, unique: true, sparse: true },
+    aadharNumber: { type: String, unique: false, default:'' },
     designation: { type: String },
     photoPath: { type: String },
 
