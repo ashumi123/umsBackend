@@ -200,7 +200,7 @@ export const registerNewStudent = async (req, res) => {
 
     try {
         // --- 1. GENERATE UNIQUE IDENTIFIERS ---
-        // const enrollmentNo = await generateEnrollmentNo(studentData.centerCode, studentData.batch);
+        const enrollmentNo = await generateEnrollmentNo(studentData.centerCode, studentData.batch);
         const newRegNo = await generateRegNo(studentData.centerCode);
 
         // --- 2. PREPARE DATA ---
@@ -213,7 +213,7 @@ export const registerNewStudent = async (req, res) => {
             ...studentData,
             regNo: newRegNo,
             course: studentData.programCode,
-            enrollmentNo: studentData.enrollmentNo,
+            enrollmentNo: enrollmentNo,
             programCode: studentData.programCode,
             batch: studentData.batch,
             previousQualifications: qualifications, // Save the dynamic qualifications array including the documentPath
@@ -239,7 +239,7 @@ export const registerNewStudent = async (req, res) => {
             const field = Object.keys(error.keyValue)[0];
             return res.status(400).json({ success: false, message: `Duplicate entry for ${field}: ${error.keyValue[field]} already exists.` });
         }
-        console.error('Registration Error:', error);
+        console.log('Registration Error:', error);
         res.status(500).json({ success: false, message: 'Server error during student registration.', error: error.message });
     }
 };
