@@ -71,6 +71,7 @@ const SubjectSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'External maximum marks are required.'],
     },
+  
     // The total max marks is derived from internalMax + externalMax
 }, { _id: false }); 
 
@@ -89,6 +90,9 @@ const CourseSchema = new mongoose.Schema({
         required: [true, 'Course code is required.'], 
         unique: true, 
         uppercase: true 
+    },
+    semester: { 
+        type: String, 
     },
     // Nested fee structure
     feeStructure: { 
