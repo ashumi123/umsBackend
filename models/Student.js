@@ -102,6 +102,7 @@ const studentSchema = new mongoose.Schema({
 
     // 4. Programme Details
     course: { type: String, required: true },
+    semester: { type: String, required: true },
     modeOfStudy: { type: String, enum: ['Regular', 'ODL', 'Online'] },
     admissionType: { type: String },
     academicSession: { type: String },

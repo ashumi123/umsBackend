@@ -388,10 +388,10 @@ export const getStudentsWithMarksPreview = async (req, res) => {
             programCode: students.program, // Assuming the program field is now programCode
             // Student's marks: Key is Semester Name, Value is SemesterMarksSchema object
             marks: new Map([
-                [courses?.name + ' ' + courses?.semester, {
+                [courses?.name , {
                     semester: courses?.semester,
                     subjects:
-                        courses?.subjects
+                        courses.subjects
                     // { subjectCode: 'BCOMM 101', internalMarks: 24, externalMarks: 34, totalMarks: 58, gp: 6, earnedCredit: 3 },
                     // { subjectCode: 'BCOMM 102', internalMarks: 25, externalMarks: 40, totalMarks: 65, gp: 7, earnedCredit: 3 },
                     // ... other subjects
