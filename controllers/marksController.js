@@ -30,11 +30,11 @@ import Course from '../models/Course.js'
 //                     if (subject.credit && subject.gp && subject.totalMarks) {
 //                         // 1. Calculate Grade Point Total (Credit * GP)
 //                         totalCreditPoint += subject.credit * subject.gp;
-                        
+
 //                         // 2. Accumulate Earned Credit
 //                         // Earned credit is crucial for CGPA calculation. It should be 0 if the student failed.
 //                         totalEarnedCredit += subject.earnedCredit || 0; 
-                        
+
 //                         // 3. Accumulate Marks
 //                         totalMarksObtained += subject.totalMarks;
 //                         totalMaxMarks += SUBJECT_MAX_MARKS;
@@ -47,7 +47,7 @@ import Course from '../models/Course.js'
 //     // --- Final Metrics Calculation ---
 //     const overallCGPA = totalEarnedCredit > 0 ? (totalCreditPoint / totalEarnedCredit) : 0;
 //     const overallPercentage = totalMaxMarks > 0 ? (totalMarksObtained / totalMaxMarks) * 100 : 0;
-    
+
 //     return {
 //         // Round to two decimal places
 //         finalCGPA: parseFloat(overallCGPA.toFixed(2)),
@@ -63,7 +63,7 @@ import Course from '../models/Course.js'
 //     try {
 //         const students = await Student.find({ status: 'Active' })
 //             .select('nameCandidate enrollmentNo program batch isApproved marks finalCGPA overallPercentage result');
-        
+
 //         // Apply the calculation algorithm before sending to the frontend
 //         const studentsWithPerformance = students.map(student => {
 //             const performance = calculateStudentPerformance(student);
@@ -92,26 +92,26 @@ import Course from '../models/Course.js'
 //     if (student.marks) {
 //         // Mongoose Map iteration: Array.from(map.entries())
 //         Array.from(student.marks.entries()).forEach(([, semesterData]) => {
-            
+
 //             // Use optional chaining and nullish coalescing to safely access subjects.
 //             // If semesterData or subjects is missing/null, subjectsToProcess will be an empty array.
 //             const subjectsToProcess = semesterData?.subjects ?? [];
-            
+
 //             subjectsToProcess.forEach(subject => {
-                    
+
 //                     // Basic check for minimum required fields
 //                     if (subject.credit && subject.gp && subject.totalMarks !== undefined) {
-                        
+
 //                         // 1. Calculate Grade Point Total (Credit * GP)
 //                         totalCreditPoint += subject.credit * subject.gp;
-                        
+
 //                         // 2. Accumulate Earned Credit
 //                         // This is the correct denominator for CGPA calculation.
 //                         totalEarnedCredit += subject.earnedCredit || 0; 
-                        
+
 //                         // 3. Accumulate Marks Obtained
 //                         totalMarksObtained += subject.totalMarks;
-                        
+
 //                         // 4. *** MODIFICATION: Dynamically calculate Total Max Marks ***
 //                         // Use the new internalMax and externalMax fields for accurate percentage.
 //                         const subjectMaxMarks = (subject.internalMax || 40) + (subject.externalMax || 60);
@@ -124,10 +124,10 @@ import Course from '../models/Course.js'
 //     // --- Final Metrics Calculation ---
 //     // CGPA is calculated as Total Credit Points / Total Earned Credit
 //     const overallCGPA = totalEarnedCredit > 0 ? (totalCreditPoint / totalEarnedCredit) : 0;
-    
+
 //     // Percentage is calculated as Total Marks Obtained / Total Max Marks
 //     const overallPercentage = totalMaxMarks > 0 ? (totalMarksObtained / totalMaxMarks) * 100 : 0;
-    
+
 //     return {
 //         // Round to two decimal places
 //         finalCGPA: parseFloat(overallCGPA.toFixed(2)),
@@ -146,7 +146,7 @@ import Course from '../models/Course.js'
 //     try {
 //         const students = await Student.find({ status: 'Active' })
 //             .select('nameCandidate enrollmentNo program batch isApproved marks finalCGPA overallPercentage result');
-        
+
 //         // Apply the calculation algorithm before sending to the frontend
 //         const studentsWithPerformance = students.map(student => {
 //             const performance = calculateStudentPerformance(student);
@@ -197,7 +197,7 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
     let totalMaxMarks = 0; // Σ Max Total Marks
     let totalMarksObtained = 0; // Σ Total Marks Obtained
     const detailedSubjects = [];
-    
+
     // Create a quick lookup map for subject definitions (Code -> Def)
     const subjectDefMap = new Map();
     courseSubjects.forEach(def => {
@@ -213,22 +213,22 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
     // Iterate through all semesters recorded for the student
     Array.from(studentMarksMap.entries()).forEach(([semesterName, semesterData]) => {
         const subjectResults = semesterData?.subjects ?? [];
-        
+
         subjectResults.forEach(result => {
-            console.log('result===>',result);
+            console.log('result===>', result);
 
             const subjectDef = subjectDefMap.get(result.subjectCode);
-            console.log('subjectDef===>',subjectDef);
+            console.log('subjectDef===>', subjectDef);
             // Check for valid definition and valid result data (GP and Earned Credit must be defined)
             // if (subjectDef && result.credit !== undefined ) {
             //     console.log('subjectDef.subjectName',subjectDef);
             //     // 1. Accumulate Credit Point Total (Credit * GP)
             //     // Note: We use subjectDef.credit (max credit) for CGPA calculation
             //     totalCreditPoint += subjectDef.credit * 1;
-                
+
             //     // 2. Accumulate Earned Credit (The credit the student actually earned, typically equals subjectDef.credit on pass)
             //     totalEarnedCredit += result.earnedCredit; 
-                
+
             //     // 3. Accumulate Marks Obtained and Total Max Marks
             //     totalMarksObtained += result.totalMarks;
             //     totalMaxMarks += subjectDef.maxTotalMarks;
@@ -249,45 +249,45 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
             //         earnedCredit: result.earnedCredit,
             //     });
             // } 
-            if (subjectDef ) {
+            if (subjectDef) {
                 // Determine maxTotalMarks from the internal and external max marks
                 // This accounts for subjectDef being a Mongoose subdocument or a plain object.
                 const maxTotalMarks = subjectDef._doc.internalMax + subjectDef._doc.externalMax;
                 const obtTotalMarks = subjectDef._doc.subjectDef?.internalObtain + subjectDef._doc.externalObtain;
-            
+
                 console.log('subjectDef.subjectName', subjectDef?._doc?.subjectName);
-            
+
                 // 1. Accumulate Credit Point Total (Credit * GP)
                 // Note: We use subjectDef.credit (max credit) for CGPA calculation.
                 // Assuming GP is 1 for totalCreditPoint calculation (as in original code), 
                 // but this is often Credit * GradePoint, so check your original GP calculation logic.
                 // Sticking to original: totalCreditPoint += subjectDef.credit * 1;
-                totalCreditPoint += [subjectDef?._doc?.credit?subjectDef?._doc?.credit:1] * (result.gp !== undefined ? result.gp : 1); // Use GP if available, otherwise 1 (as per original logic's intent, but safer to use GP)
-            
+                totalCreditPoint += [subjectDef?._doc?.credit ? subjectDef?._doc?.credit : 1] * (result.gp !== undefined ? result.gp : 1); // Use GP if available, otherwise 1 (as per original logic's intent, but safer to use GP)
+
                 // 2. Accumulate Earned Credit (The credit the student actually earned, typically equals subjectDef.credit on pass)
                 totalEarnedCredit += result.earnedCredit;
-            
+
                 // 3. Accumulate Marks Obtained and Total Max Marks
                 totalMarksObtained += obtTotalMarks;
                 totalMaxMarks += maxTotalMarks; // Use the explicitly calculated value
-            
+
                 // Build a detailed subject record for the client
                 detailedSubjects.push({
                     semester: semesterName,
                     subjectName: subjectDef?._doc?.subjectName,
                     subjectCode: subjectDef?._doc.subjectCode,
-                    credit: subjectDef?._doc.credit?subjectDef?._doc.credit:1, // Max Credit
+                    credit: subjectDef?._doc.credit ? subjectDef?._doc.credit : 1, // Max Credit
                     maxMarks: maxTotalMarks, // Use the explicitly calculated value
                     internalMax: subjectDef?._doc.internalMax,
                     externalMax: subjectDef?._doc.externalMax,
-                    internalMarks: subjectDef?._doc?.internalObtain?subjectDef?._doc?.internalObtain:50, // New field for clarity
-                    externalMarks: subjectDef?._doc?.externalObtain?subjectDef?._doc?.externalObtain:50, // New field for clarity
+                    internalMarks: subjectDef?._doc?.internalObtain ? subjectDef?._doc?.internalObtain : 50, // New field for clarity
+                    externalMarks: subjectDef?._doc?.externalObtain ? subjectDef?._doc?.externalObtain : 50, // New field for clarity
                     totalMarksObtained: result.totalMarks,
                     gp: result?.gp,
                     earnedCredit: result.earnedCredit,
                 });
             }
-            
+
             else {
                 console.warn(`[Performance Calc] Subject ${result.subjectCode} in ${semesterName} is missing definition or result data. Skipping.`);
             }
@@ -298,9 +298,9 @@ export const mergeAndCalculatePerformance = (studentMarksMap, courseSubjects) =>
     // CGPA Calculation: Total Credit Points divided by Total Credits attempted (or Total Earned Credit, depending on institutional rule).
     // Using totalEarnedCredit here, as it better reflects the 'successful' academic load.
     const overallCGPA = totalEarnedCredit > 0 ? (totalCreditPoint / totalEarnedCredit) : 0;
-    
+
     const overallPercentage = totalMaxMarks > 0 ? (totalMarksObtained / totalMaxMarks) * 100 : 0;
-    
+
     return {
         // Round to two decimal places
         finalCGPA: parseFloat(overallCGPA.toFixed(2)),
@@ -322,7 +322,7 @@ export const getStudentsWithMarks = async (req, res) => {
         // 1. Fetch all active students
         const students = await Student.find({ status: 'Active' })
             .select('nameCandidate enrollmentNo program batch marks isApproved');
-        
+
         // 2. Fetch all Course definitions for efficient lookup
         const courses = await Course.find().select('value subjects name');
         const courseMap = new Map();
@@ -330,13 +330,13 @@ export const getStudentsWithMarks = async (req, res) => {
             // Map: 'BCOM' -> [SubjectDefinition1, SubjectDefinition2, ...]
             courseMap.set(course.name, course.subjects);
         });
-        console.log('courses',courses);
-        console.log('courseMap',courseMap);
-        
+        console.log('courses', courses);
+        console.log('courseMap', courseMap);
+
         // 3. Process each student
         const studentsWithPerformance = students.map(student => {
             const studentObject = student.toObject();
-            
+
             // Find the subject definitions for the student's program
             const courseSubjects = courseMap.get(studentObject.program);
             console.log('courseSubjects', courseSubjects)
@@ -347,11 +347,11 @@ export const getStudentsWithMarks = async (req, res) => {
                 performance = mergeAndCalculatePerformance(studentObject.marks, student.programSubjects);
             } else {
                 // Handle missing data scenario
-                performance = { 
-                    finalCGPA: 0.00, 
-                    overallPercentage: 0.00, 
-                    result: 'Data Missing', 
-                    detailedSubjects: [] 
+                performance = {
+                    finalCGPA: 0.00,
+                    overallPercentage: 0.00,
+                    result: 'Data Missing',
+                    detailedSubjects: []
                 };
             }
 
@@ -362,7 +362,7 @@ export const getStudentsWithMarks = async (req, res) => {
                 overallPercentage: performance.overallPercentage,
                 result: performance.result,
                 // Include detailed subjects if the client needs them for drill-down
-                subjects: student.programSubjects, 
+                subjects: student.programSubjects,
             };
         });
 
@@ -378,30 +378,30 @@ export const getStudentsWithMarksPreview = async (req, res) => {
     try {
         // MOCK DATA for a single student (Semester I)
         const students = await Student.findOne({ _id: req.body._id })
-        const courses = await Course.findOne({name:students.course})
-            // .select('nameCandidate enrollmentNo program batch marks isApproved');
+        const courses = await Course.findOne({ name: students.course })
+        // .select('nameCandidate enrollmentNo program batch marks isApproved');
         const mockStudent = {
             id: students._id,
             nameCandidate: students.nameCandidate,
-            programSubjects:students.programSubjects,
+            programSubjects: students.programSubjects,
             enrollmentNo: students.enrollmentNo,
             programCode: students.program, // Assuming the program field is now programCode
             // Student's marks: Key is Semester Name, Value is SemesterMarksSchema object
             marks: new Map([
-                [courses.name, {
-                    semester: courses.name,
-                    subjects: 
-                        courses.subjects
-                        // { subjectCode: 'BCOMM 101', internalMarks: 24, externalMarks: 34, totalMarks: 58, gp: 6, earnedCredit: 3 },
-                        // { subjectCode: 'BCOMM 102', internalMarks: 25, externalMarks: 40, totalMarks: 65, gp: 7, earnedCredit: 3 },
-                        // ... other subjects
-                    
+                [courses?.name + ' ' + courses?.semester, {
+                    semester: courses?.semester,
+                    subjects:
+                        courses?.subjects
+                    // { subjectCode: 'BCOMM 101', internalMarks: 24, externalMarks: 34, totalMarks: 58, gp: 6, earnedCredit: 3 },
+                    // { subjectCode: 'BCOMM 102', internalMarks: 25, externalMarks: 40, totalMarks: 65, gp: 7, earnedCredit: 3 },
+                    // ... other subjects
+
                 }],
             ]),
         };
 
-        console.log('mockStudent',mockStudent.marks);
-        
+        console.log('mockStudent', mockStudent.marks);
+
         // MOCK Course Subjects (Max Marks and Credit from the image)
         // const mockCourseSubjects = [
         //     { subjectCode: 'BCOMM 101', subjectName: 'English Language-I', credit: 3, internalMax: 40, externalMax: 60 },
@@ -409,14 +409,14 @@ export const getStudentsWithMarksPreview = async (req, res) => {
         //     { subjectCode: 'BCOMM 103', subjectName: 'Business Mathematics', credit: 4, internalMax: 40, externalMax: 60 },
         //     // ... and so on for the rest of the course subjects
         // ];
-        
+
         // Simulating the course map lookup
         const courseMap = mockStudent.marks
 
         const studentObject = mockStudent; // Use mock student
-        const courseSubjects = courseMap.get(studentObject.programCode); 
-        console.log('courseSubjectscourseSubjectscourseSubjects',courseSubjects);
-        
+        const courseSubjects = courseMap.get(studentObject.programCode);
+        console.log('courseSubjectscourseSubjectscourseSubjects', courseSubjects);
+
         let performance = { finalCGPA: 0.00, overallPercentage: 0.00, result: 'Data Missing', detailedSubjects: [] };
 
         if (courseSubjects && studentObject.marks) {
@@ -428,12 +428,12 @@ export const getStudentsWithMarksPreview = async (req, res) => {
             finalCGPA: performance.finalCGPA,
             overallPercentage: performance.overallPercentage,
             result: performance.result,
-            subjects: performance.detailedSubjects, 
+            subjects: performance.detailedSubjects,
         }];
 
         // In a real controller, you would use:
         res.status(200).json({ success: true, data: studentsWithPerformance });
-        
+
         console.log('--- MOCK CALCULATION RESULT ---');
         console.log('CGPA:', performance.finalCGPA); // Should be approx 6.66 for Semester I
         console.log('Percentage:', performance.overallPercentage); // Should be approx 62.83% for Semester I
@@ -454,7 +454,7 @@ export const approveCertificate = async (req, res) => {
     try {
         const { enrollmentNo } = req.params;
         const { isApproved } = req.body;
-        
+
         const student = await Student.findOne({ enrollmentNo: enrollmentNo });
 
         if (!student) {
@@ -463,7 +463,7 @@ export const approveCertificate = async (req, res) => {
 
         // --- Update Approval Status ---
         student.isApproved = isApproved;
-        
+
         if (isApproved) {
             // Recalculate and permanently store final results in the DB on approval
             const performance = calculateStudentPerformance(student);
@@ -489,14 +489,14 @@ export const getCertificateData = async (req, res) => {
     try {
         const { enrollmentNo } = req.params;
         const student = await Student.findOne({ enrollmentNo: enrollmentNo });
-        
+
         if (!student) {
             return res.status(404).json({ success: false, message: 'Student not found.' });
         }
-        
+
         // Recalculate and embed performance results for absolute accuracy on certificate
         const performance = calculateStudentPerformance(student);
-        
+
         const studentData = {
             ...student.toObject(),
             ...performance, // Overwrite final CGPA/Percentage with real-time calculated values
