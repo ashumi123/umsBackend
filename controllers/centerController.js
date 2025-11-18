@@ -3,6 +3,7 @@ import Center from '../models/Center.js';
 import Student from '../models/Student.js';
 import bcrypt from 'bcrypt';
 import User from '../models/Users.js';
+import SubCenter from '../models/SubCenter.js';
 
 // @route   GET /api/v1/centers
 // @desc    Get all centers with optional filtering
@@ -92,3 +93,36 @@ export const getCenterSummary = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
+export const createSubCenter = async (req, res) => {
+    try {
+        const existingUser = await User.findOne({ username:req.body.email });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Username already taken.' });
+        }
+        const center = await SubCenter.create(req.body);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.centerCode, salt);
+  
+        
+        // Create and save new user
+        const newUser = new User({
+            username:req.body.email,
+            password: hashedPassword, // Store the hashed password
+            adminType:'Sub-Center'
+        });
+  
+        await newUser.save();
+        res.status(201).json({ success: true, data: center });
+
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+export const getSubCenterByCenter=(req)=>{
+const subCenters=  SubCenter.find({createdBy:req.body.centerId});
+        res.status(201).json({ success: true, data: subCenters });
+
+}

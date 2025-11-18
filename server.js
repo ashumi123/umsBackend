@@ -9,6 +9,7 @@ import centerRoutes from './routes/centerRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import accountRoutes from './routes/accountRoutes.js';
+import subCenterRoutes from './routes/subcenterRoutes.js';
 
 import { seedDatabase } from './seeder.js'; // Import the seeder
 import bcrypt from 'bcrypt';
@@ -64,6 +65,7 @@ app.use('/api/v1/centers', centerRoutes);
 app.use('/api/v1/students', studentRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/accounts', accountRoutes);
+app.use('/api/v1/sub-centers', subCenterRoutes);
 
 const generateToken = payload => JWT.sign(payload, JWT_SECRET);
 

@@ -190,7 +190,7 @@ const generateEnrollmentNo = async (centerCode, batch) => {
 export const registerNewStudent = async (req, res) => {
 
     // NOTE: In a real app, 'req.user.id' would come from auth middleware
-    const userId = 'CenterUser123';
+    const userId = req.body.userId?req.body.userId: 'CenterUser123';
     const studentData = req.body;
 
     // Check mandatory fields for core data and enrollment generation
