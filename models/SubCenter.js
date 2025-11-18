@@ -14,5 +14,5 @@ const centerSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-const SubCenter = mongoose.model('Center', centerSchema);
+const SubCenter = mongoose.model('Sub-Center', centerSchema);
 export default SubCenter;
