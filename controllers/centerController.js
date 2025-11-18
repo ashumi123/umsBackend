@@ -121,7 +121,7 @@ export const createSubCenter = async (req, res) => {
     }
 };
 
-export const getSubCenterByCenter=(req)=>{
+export const getSubCenterByCenter=(req,res)=>{
 const subCenters=  SubCenter.find({createdBy:req.body.centerId});
         res.status(201).json({ success: true, data: subCenters });
 
